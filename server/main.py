@@ -10,6 +10,8 @@ def transcribe_audio():
 def main():
     pass
 
-
+def summarize():
+    pass
+    
 if __name__ == '__main__':
     main()
