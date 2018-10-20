@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 import 'dart:async';
 import 'package:note_ai/widgets/drawer.dart';
+import 'package:note_ai/util/AudioRecord.dart';
 
 void main() => runApp(new MyApp());
 
@@ -66,12 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void _updateTime() {
     if (isRecording) {
       // Stop updating the clock
+      stopRecording();
       setState(() {
         _recordedtime = 0;
       });
       _timer.cancel();
     } else {
       // Continue incrementing our time
+      startRecording();
       const oneSec = const Duration(seconds: 1);
       _timer = Timer.periodic(
         oneSec,
