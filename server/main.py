@@ -6,13 +6,14 @@ rev_client = RevSpeechAPI(os.getenv('REV_KEY'))
 from pprint import pprint
 from time import sleep
 
-# job_id = 342133076
+# job_id = 205292554
+path = 'audio/tennis.mp3'
 
 
 def transcribe_audio():
     """Transcribe audio"""
     # Create transcription job
-    submit_info = rev_client.submit_job_local_file('audio/congress.mp3')
+    submit_info = rev_client.submit_job_local_file(path)
     job_id = submit_info['id']
     # Wait for job to complete
     done = False
@@ -26,8 +27,9 @@ def transcribe_audio():
             # Job transcription is done
             done = True
             transcript_info = rev_client.get_transcript(job_id)
-            transcript = ''.join(e['value']
-                                 for e in transcript_info['monologues'][0]['elements'])
+            pprint(transcript_info)
+            transcript = ''.join(''.join(e['value'] for e in mono['elements'])
+                                 for mono in transcript_info['monologues'])
             print(transcript)
         else:
             # Job not completed
@@ -41,6 +43,7 @@ def main():
 
 
 def summarize():
+    """Summarize text"""
     pass
 
 
