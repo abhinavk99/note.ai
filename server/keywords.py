@@ -1,4 +1,5 @@
-importantWords = ["important", "neglect", "challenge", "wealthiest", "critical", "severe", "relevant", "paramount", "primary", "exceptional", "significant", "momentous"]
+importantWords = ["important", "neglect", "challenge", "wealthiest", "critical",
+                  "severe", "relevant", "paramount", "primary", "exceptional", "significant", "momentous"]
 
 
 def is_critical(str):

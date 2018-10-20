@@ -1,4 +1,5 @@
 import requests
+import os
 
 def remove_some_punctuation(word):
     word = word.replace(".", "")
@@ -24,7 +25,7 @@ def is_noun(word):
     try:
         response = requests.get("https://wordsapiv1.p.mashape.com/words/" + word + "/definitions",
             headers={
-                "X-Mashape-Key": "uVoKTP7XPZmshpbJj6L1L9Y4Q7oap1jn1mzjsnrTEsfvsqdO0I",
+                "X-Mashape-Key": os.getenv('WORDS_API_KEY'),
                 "Accept": "application/json"
             }
         )
