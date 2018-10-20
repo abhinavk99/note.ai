@@ -1,3 +1,4 @@
+import requests
 
 def remove_some_punctuation(word):
     word = word.replace(".", "")
@@ -21,7 +22,7 @@ def has_three_consecutive_nouns(sentence):
 
 def is_noun(word):
     try:
-        response =  requests.get("https://wordsapiv1.p.mashape.com/words/" + word + "/definitions",
+        response = requests.get("https://wordsapiv1.p.mashape.com/words/" + word + "/definitions",
             headers={
                 "X-Mashape-Key": "uVoKTP7XPZmshpbJj6L1L9Y4Q7oap1jn1mzjsnrTEsfvsqdO0I",
                 "Accept": "application/json"
