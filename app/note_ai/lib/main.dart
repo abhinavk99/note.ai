@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:core';
+import 'dart:async';
+import 'package:note_ai/widgets/drawer.dart';
 
 void main() => runApp(new MyApp());
 
@@ -44,6 +47,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _recordedtime = 0;
+  bool isRecording = false;
+  var time = "";
+  Timer _timer;
 
   void _incrementCounter() {
     setState(() {
@@ -56,25 +63,77 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _updateTime() {
+    if (isRecording) {
+      // Stop updating the clock
+      setState(() {
+        _recordedtime = 0;
+      });
+      _timer.cancel();
+    } else {
+      // Continue incrementing our time
+      const oneSec = const Duration(seconds: 1);
+      _timer = Timer.periodic(
+        oneSec,
+        (Timer t) {
+          setState(() {
+            _recordedtime++;
+          });
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return new Scaffold(
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
       ),
-      body: new Center(),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
+      drawer: getDrawer(context),
+      body: new Center(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+            ),
+            Text(
+              _recordedtime.toString(),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 150.0,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+            ),
+            SizedBox(
+              height: 100.0,
+              width: 100.0,
+              child: RaisedButton(
+                color: Colors.red,
+                shape: CircleBorder(
+                  side: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  print("Started Recording");
+                  isRecording = isRecording ? false : true;
+                  _updateTime();
+                  // Add code to trigger recording
+                },
+                child: Icon(
+                  Icons.mic,
+                  color: Colors.white,
+                  size: 45.0,
+                ),
+              ),
+            ),
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
