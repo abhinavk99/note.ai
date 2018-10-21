@@ -6,6 +6,8 @@ rev_client = RevSpeechAPI(os.getenv('REV_KEY'))
 from pprint import pprint
 from time import sleep
 from apply_filters import apply_filters
+from flask import Flask
+app = Flask(__name__)
 
 # job_id = 205292554
 PATH = 'audio/tennis.mp3'
@@ -34,6 +36,15 @@ TEXT = ("Through success and controversy, Facebook CEO Mark Zuckerberg has been 
         "the wealthiest CEOs in the world.")
 
 
+@app.route('/transcribe', methods=['POST'])
+def transcribe():
+    transcript = transcribe_audio(PATH)
+    if transcript != '':
+        return {'transcript': transcript}
+    else:
+        return {'error': 'Failed'}
+
+
 def transcribe_audio(path=None):
     """Transcribe audio"""
     # Use default path if none provided
@@ -49,6 +60,7 @@ def transcribe_audio(path=None):
             # Job failed
             print(job_id + 'failed.')
             done = True
+            return ''
         elif job_info['status'] == 'transcribed':
             # Job transcription is done
             done = True
@@ -57,7 +69,7 @@ def transcribe_audio(path=None):
             # Convert transcript information to block of text
             transcript = ''.join(''.join(e['value'] for e in mono['elements'])
                                  for mono in transcript_info['monologues'])
-            print(transcript)
+            return transcript
         else:
             # Job not completed
             print(job_id + ' is not completed yet.')
